@@ -36,16 +36,16 @@
                     </div>
                 </div>
             </div>
-            <div class="commend other">
-                <div class="commend_info other_title">评论列表</div>
-                <div class="commend_info" v-for="comment in comments">
-                    <div class="other_info commend_author ">
-                        <div class="commend_img ">img</div>
-                        <div class="commend_name ">{{comment.user.user_name}}</div>
-                        <div class="commend_time">{{comment.created_at}}</div>
+            <div class="comment other">
+                <div class="comment_info other_title">评论列表</div>
+                <div class="comment_info" v-for="(comment,index) in comments" :key="index">
+                    <div class="other_info comment_author ">
+                        <div class="comment_img ">img</div>
+                        <div class="comment_name ">{{comment.user.user_name}}</div>
+                        <div class="comment_time">{{comment.created_at}}</div>
                     </div>
-                    <div class="commend_content">{{comment.content}}</div>
-                    <div class="commend_option">
+                    <div class="comment_content">{{comment.content}}</div>
+                    <div class="comment_option">
                         <Icon type="chatbox-working" class="opt"></Icon>
                         <Icon type="thumbsup" class="opt"></Icon>
                         <span class="opt count">{{comment.praisenum}}</span>
@@ -74,9 +74,9 @@
 
 <script>
     import axios from "axios";
-    // props:["centent_id"];
     export default{
         name:"Artical",
+        // props:["contentId"],
         data(){
             return{
                 artical:"",
@@ -102,35 +102,35 @@
             }
         },
         created:function(){
-            var url="http://v3.wufazhuce.com:8000/api/essay/" + 2949 + "?version=3.5.0&platform=android";
+            var content_id=this.$route.params.id;
+            var url="http://v3.wufazhuce.com:8000/api/essay/" + content_id + "?version=3.5.0&platform=android";
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        // console.log(data.data.data);
+                        console.log(this.artical);
                     })
                 .catch();
-            var url_com="http://v3.wufazhuce.com:8000/api/comment/praiseandtime/essay/" + 2949 + "/0?version=3.5.0&platform=android"
+            var url_com="http://v3.wufazhuce.com:8000/api/comment/praiseandtime/essay/" + content_id + "/0?version=3.5.0&platform=android"
             axios.get(url_com)
                 .then(data=>{
                     this.comments=data.data.data.data;
-                    console.log(this.comments);
                     })
                 .catch();          
         }
     }
 </script>
 <style scoped>
-   .commend_info{
+   .comment_info{
         display: flex;
         flex-direction: column;
     }
-    .commend_author{
+    .comment_author{
         display: flex;
         flex-direction: row;
         align-items: center;
         /* background: red; */
     }
-    .commend_img,.commend_name,.commend_time{
+    .comment_img,.comment_name,.comment_time{
         margin: 0 5px;
         /* width:30px; */
         height:30px;
@@ -138,17 +138,17 @@
         color:#999;
         margin-bottom:5px;
     }
-    .commend_img{
+    .comment_img{
         width:30px;
         border-radius: 50%;
         background: yellow;
     }
-    .commend_time{
+    .comment_time{
         flex:1;
         text-align: right;
         letter-spacing: 0;
     }
-    .commend_content{
+    .comment_content{
         /* height: 18px; */
         width:calc(100% - 20px);
         
@@ -159,7 +159,7 @@
         text-align: left;
     }
    
-    .commend_option{
+    .comment_option{
         font-size:25px;
         display: flex;
         justify-content: flex-end;  

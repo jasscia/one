@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <div v-for = "artical in artical_list" class="artical_list" v-on:click="linkTo(artical.centent_id)">
+    <div v-for = "artical in artical_list" class="artical_list" v-on:click="linkTo(artical.content_id)">
       <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
       <div class="img" ></div>
       <div class="text">
@@ -25,14 +25,14 @@ export default {
   created:function(){
     var url="http://v3.wufazhuce.com:8000/api/reading/index/?version=3.5.0&platform=android";
     axios.get(url)
-      .then((data)=>{this.artical_list=data.data.data.essay;console.log("in reading_list");console.log(this.artical_list)})
+      .then((data)=>{this.artical_list=data.data.data.essay;})
       .catch()  
   },
   methods:{
     linkTo:function(content_id){
-      console.log("hello");
-      this.$router.push({name: 'Artical',
-        query: {
+      console.log(content_id);
+        this.$router.push({name: 'Artical',
+        params: {
           id: content_id
         }})
     }

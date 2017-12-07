@@ -13,7 +13,7 @@ export default new Router({
       component: Reading
     },
     {
-      path: '/reading/artical',
+      path: '/reading/artical/:id',
       name: 'Artical',
       component: Artical
     }
