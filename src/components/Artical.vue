@@ -13,7 +13,7 @@
                 <span>有声阅读|{{artical.anchor}}</span>
                 <span>{{duration}}</span>
             </div>
-            <!-- <div class="content" v-html="artical.hp_content"></div> -->
+            <div class="content" v-html="artical.hp_content"></div>
             <div class="side_title">{{artical.hp_author_introduce}}</div>
             <div class="author other">
                 <div class="author_title other_title">作者</div>
@@ -38,19 +38,17 @@
             </div>
             <div class="commend other">
                 <div class="commend_info other_title">评论列表</div>
-                <div class="commend_info" v-for="">
-                    <div class="other_info commend_author side_title">
-                        <div class="commend_img side_title">img</div>
-                        <div class="commend_name side_title">name</div>
-                        <div class="commend_time side_title">time</div>
+                <div class="commend_info" v-for="comment in comments">
+                    <div class="other_info commend_author ">
+                        <div class="commend_img ">img</div>
+                        <div class="commend_name ">{{comment.user.user_name}}</div>
+                        <div class="commend_time">{{comment.created_at}}</div>
                     </div>
-                    <div class="commend_content">
-                        自己瞎搞的，简单的绝对定位即可解决问题，为啥还要搞什么圣杯和双飞翼。自己瞎搞的，简单的绝对定位即可解决问题，为啥还要搞什么圣杯和双飞翼
-                    </div>
+                    <div class="commend_content">{{comment.content}}</div>
                     <div class="commend_option">
                         <Icon type="chatbox-working" class="opt"></Icon>
                         <Icon type="thumbsup" class="opt"></Icon>
-                        <span class="opt count">{{1}}</span>
+                        <span class="opt count">{{comment.praisenum}}</span>
                     </div>
                 </div>
             </div>
@@ -76,11 +74,13 @@
 
 <script>
     import axios from "axios";
+    // props:["centent_id"];
     export default{
         name:"Artical",
         data(){
             return{
-                artical:""
+                artical:"",
+                comments:""
             }
         },
         computed:{
@@ -106,9 +106,16 @@
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        console.log(data.data.data);
+                        // console.log(data.data.data);
                     })
-                .catch()
+                .catch();
+            var url_com="http://v3.wufazhuce.com:8000/api/comment/praiseandtime/essay/" + 2949 + "/0?version=3.5.0&platform=android"
+            axios.get(url_com)
+                .then(data=>{
+                    this.comments=data.data.data.data;
+                    console.log(this.comments);
+                    })
+                .catch();          
         }
     }
 </script>
@@ -125,17 +132,21 @@
     }
     .commend_img,.commend_name,.commend_time{
         margin: 0 5px;
-        width:30px;
+        /* width:30px; */
         height:30px;
         line-height: 30px;
+        color:#999;
+        margin-bottom:5px;
     }
     .commend_img{
+        width:30px;
         border-radius: 50%;
         background: yellow;
     }
     .commend_time{
         flex:1;
         text-align: right;
+        letter-spacing: 0;
     }
     .commend_content{
         /* height: 18px; */
@@ -147,8 +158,9 @@
         letter-spacing: 1px;
         text-align: left;
     }
+   
     .commend_option{
-        font-size:30px;
+        font-size:25px;
         display: flex;
         justify-content: flex-end;  
         align-items: center; 
@@ -159,7 +171,7 @@
         margin: 5px 10px;
     }
     .opt.count{
-        transform: translate(-35px);
+        transform: translate(-30px);
         font-size:15px;
     }
     

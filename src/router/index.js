@@ -9,11 +9,11 @@ export default new Router({
   routes: [
     {
       path: '/reading/list',
-      name: 'Reading',
+      name: 'Reading_list',
       component: Reading
     },
     {
-      path: '/reading/artical/',
+      path: '/reading/artical',
       name: 'Artical',
       component: Artical
     }

@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
-    <div v-for = "item in msg" class="item" >
+    <div v-for = "artical in artical_list" class="artical_list" v-on:click="linkTo(artical.centent_id)">
+      <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
       <div class="img" ></div>
       <div class="text">
-        <p class="title">{{ item.hp_title }}</p>
-        <p class="author">文/{{ item.author[0].user_name }}</p>
+        <p class="title">{{ artical.hp_title }}</p>
+        <p class="author">文/{{ artical.author[0].user_name }}</p>
       </div>
     </div>
     <!-- <p >{{ msg }}</p> -->
@@ -15,17 +16,26 @@
 <script>
 import axios from "axios";
 export default {
-  name: 'Reading',
+  name: 'Reading_list',
   data () {
     return {
-      msg:""
+      artical_list:""
     }
   },
   created:function(){
     var url="http://v3.wufazhuce.com:8000/api/reading/index/?version=3.5.0&platform=android";
     axios.get(url)
-      .then((data)=>{this.msg=data.data.data.essay;console.log(this.msg)})
+      .then((data)=>{this.artical_list=data.data.data.essay;console.log("in reading_list");console.log(this.artical_list)})
       .catch()  
+  },
+  methods:{
+    linkTo:function(content_id){
+      console.log("hello");
+      this.$router.push({name: 'Artical',
+        query: {
+          id: content_id
+        }})
+    }
   }
 }
 </script>
@@ -36,7 +46,7 @@ export default {
     margin:0;
     padding:0;
   }  
-  .item{
+  .artical_list{
     border-bottom:solid 1px #eee;
     display: flex;
     margin:10px;
