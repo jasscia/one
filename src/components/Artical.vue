@@ -5,57 +5,38 @@
             <span>阅读</span>
             <span><Icon type="android-bookmark"></Icon></span>
         </div>
+        
         <div class="artical">
-            <div class="title">{{ artical.hp_title }}</div>
-            <div class="side_title">文/{{ artical.hp_author }}</div>
-            <div class="anchor" v-if="artical.anchor">
-                <Icon type="android-volume-up" class="icon"></Icon>
-                <span>有声阅读|{{artical.anchor}}</span>
-                <span>{{duration}}</span>
-            </div>
-            <div class="content" v-html="artical.hp_content"></div>
-            <div class="side_title">{{artical.hp_author_introduce}}</div>
+            <transition name="slide-fade">
+            <!-- <ArticalContent></ArticalContent> -->
+            </transition>
+            
             <div class="author other">
                 <div class="author_title other_title">作者</div>
                 <div class="author_info other_info">
-                    <div class="author_img other_img"></div>
+                    <img class="author_img other_img" :src="authorImg"/>
                     <div class="author_info_text other_info_text">
                         <div class="author_name other_name">{{artical.hp_author}}</div>
-                        <div class="summary side_title">{{artical.author[0].summary}}</div>
+                        <div class="summary side_title">{{artical.author&&artical.author[0].summary}}</div>
                     </div>
                     <div class="care">关注</div>
                 </div>
-            </div>
+            </div>            
             <div class="recommend other">
                 <div class="recommend_title other_title">相关推荐</div>
                 <div class="recommend_info other_info">
                     <div class="recommend_img other_img">阅读</div>
                     <div class="recommend_info_text other_info_text">
                         <div class="recommend_name other_name">{{artical.hp_author}}</div>
-                        <div class="recommend_author side_title">{{artical.author[0].summary}}</div>
+                        <div class="recommend_author side_title">{{artical.author&&artical.author[0].summary}}</div>
                     </div>
                 </div>
             </div>
-            <div class="comment other">
-                <div class="comment_info other_title">评论列表</div>
-                <div class="comment_info" v-for="(comment,index) in comments" :key="index">
-                    <div class="other_info comment_author ">
-                        <div class="comment_img ">img</div>
-                        <div class="comment_name ">{{comment.user.user_name}}</div>
-                        <div class="comment_time">{{comment.created_at}}</div>
-                    </div>
-                    <div class="comment_content">{{comment.content}}</div>
-                    <div class="comment_option">
-                        <Icon type="chatbox-working" class="opt"></Icon>
-                        <Icon type="thumbsup" class="opt"></Icon>
-                        <span class="opt count">{{comment.praisenum}}</span>
-                    </div>
-                </div>
-            </div>
+            <CommentList></CommentList>
         </div>
         <div class="footer">
             <!-- <div> -->
-                <input class="eval" value="写一个评论..."/>
+                <input class="eval" placeholder="写一个评论..."/>
                 <div class="love">
                     <Icon type="android-favorite-outline"></Icon>                 
                     <div  class="asign">{{artical.commentnum}}</div>
@@ -73,12 +54,19 @@
 </template>
 
 <script>
+    import CommentList from "./CommentList";
+    import ArticalContent from "./ArticalContent";
     import axios from "axios";
     export default{
         name:"Artical",
         // props:["contentId"],
+        components:{
+            CommentList,
+            ArticalContent
+        },
         data(){
             return{
+                authorImg:"http://image.wufazhuce.com/FhtwrOCqx2KefORJFkVKmu3Tm0aB",
                 artical:"",
                 comments:""
             }
@@ -107,74 +95,14 @@
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        console.log(this.artical);
+                        // console.log(this.artical);
+                        this.authorImg=this.artical.author[0].web_url;
                     })
-                .catch();
-            var url_com="http://v3.wufazhuce.com:8000/api/comment/praiseandtime/essay/" + content_id + "/0?version=3.5.0&platform=android"
-            axios.get(url_com)
-                .then(data=>{
-                    this.comments=data.data.data.data;
-                    })
-                .catch();          
+                .catch();        
         }
     }
 </script>
 <style scoped>
-   .comment_info{
-        display: flex;
-        flex-direction: column;
-    }
-    .comment_author{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        /* background: red; */
-    }
-    .comment_img,.comment_name,.comment_time{
-        margin: 0 5px;
-        /* width:30px; */
-        height:30px;
-        line-height: 30px;
-        color:#999;
-        margin-bottom:5px;
-    }
-    .comment_img{
-        width:30px;
-        border-radius: 50%;
-        background: yellow;
-    }
-    .comment_time{
-        flex:1;
-        text-align: right;
-        letter-spacing: 0;
-    }
-    .comment_content{
-        /* height: 18px; */
-        width:calc(100% - 20px);
-        
-        font-size:14px;
-        padding:0 10px;
-        line-height: 18px;
-        letter-spacing: 1px;
-        text-align: left;
-    }
-   
-    .comment_option{
-        font-size:25px;
-        display: flex;
-        justify-content: flex-end;  
-        align-items: center; 
-        transform: translate(40px);     
-    }
-    .opt{
-        width:30px;
-        margin: 5px 10px;
-    }
-    .opt.count{
-        transform: translate(-30px);
-        font-size:15px;
-    }
-    
     .myBody{
         margin:0;
         padding:0;
@@ -202,40 +130,7 @@
         top:60px;
         bottom:60px;
     }
-    .title{
-        font-size:22px;
-        margin-bottom: 5px;
-        font-weight: 900;
-        letter-spacing: 2px;
-    }
-    .side_title{
-        font:14px;
-        color: #666;
-        margin-bottom: 5px;
-        letter-spacing: 2px;
-    }
-    .anchor{
-        font-size: 20px;
-        letter-spacing: 1px;
-        line-height: 20px;
-        margin:auto;
-        margin-bottom: 20px;
-        padding:10px;
-        width:calc(100% - 20px);
-        height: 40px;
-        border: solid 2px #000;
-        border-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .content{
-        margin:0 10px;
-        font-size:16px;
-        color: #333;
-        line-height: 25px;
-        letter-spacing: 1px;
-        text-align: left;
-    }
+    
     .footer{
         width:calc(100% - 20px);
         height:40px;
@@ -269,16 +164,13 @@
         position: relative;
     } 
     .asign{
-        /* color: red; */
         font-size: 5px;
         text-align:center;
-        /* margin:-30px 0 0 0; */
         transform: translate(20px,-35px);
     }
 
     .other{
         margin-bottom:10px;
-        /* background: red; */
         padding:10px;
     }
     .other_title{
@@ -302,14 +194,12 @@
         padding:5px;
         line-height:20px;
     }
-    .author_img{        
+    /* .author_img{        
         background: url("../assets/logo.png");
         background-size:cover;
-    }
+    } */
     .other_info_text{
         height: 40px;
-        /* width:calc(100% - 150px); */
-        /* margin:0 auto; */
         margin-left:10px;
         text-align: left;
         flex:1;

@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
-    <div v-for = "artical in artical_list" class="artical_list" v-on:click="linkTo(artical.content_id)">
+    <div v-for = "(artical,index) in artical_list" :key=index class="artical_list" v-on:click="linkTo(artical.content_id)">
       <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
-      <div class="img" ></div>
+      <img class="img" :src="img_list[index]" />
       <div class="text">
         <p class="title">{{ artical.hp_title }}</p>
         <p class="author">文/{{ artical.author[0].user_name }}</p>
@@ -19,14 +19,40 @@ export default {
   name: 'Reading_list',
   data () {
     return {
-      artical_list:""
+      artical_list:"",
+      img_list:[]
     }
   },
   created:function(){
     var url="http://v3.wufazhuce.com:8000/api/reading/index/?version=3.5.0&platform=android";
     axios.get(url)
-      .then((data)=>{this.artical_list=data.data.data.essay;})
-      .catch()  
+      .then((data)=>{
+            this.artical_list=data.data.data.essay;
+            console.log(this.artical_list);
+            // this.artical_list.forEach(element => {
+            //         console.log(element.content_id);
+            //         var img_url="http://v3.wufazhuce.com:8000/api/hp/detail/" + element.content_id + "?version=3.5.0&platform=android";
+            //         axios.get(img_url)
+            //           .then(data=>{this.img_list.push(data.data.data.hp_img_url);console.log(data.data.data.hp_img_url)})
+            //           .catch()                    
+            //         });
+            })
+      .catch()
+    var imgs_url="http://v3.wufazhuce.com:8000/api/hp/idlist/0?version=3.5.0&platform=android";
+    var imgs_id_list="";
+    axios.get(imgs_url)
+      .then(data=>{imgs_id_list=data.data.data;
+                  console.log(imgs_id_list);
+                  imgs_id_list.forEach(element => {
+                    console.log(element);
+                    var img_url="http://v3.wufazhuce.com:8000/api/hp/detail/" + element + "?version=3.5.0&platform=android";
+                    axios.get(img_url)
+                      .then(data=>{this.img_list.push(data.data.data.hp_img_url);console.log(data.data.data.hp_img_url)})
+                      .catch()                    
+                    });
+                    console.log(this.img_list);
+                  })
+      .catch()
   },
   methods:{
     linkTo:function(content_id){
