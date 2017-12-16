@@ -1,5 +1,10 @@
 <template>
   <div class="hello">
+    <div class="header">
+            <span><Icon type="chevron-left"></Icon></span>
+            <span>阅读</span>
+            <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
+        </div>
     <div v-for = "(artical,index) in artical_list" :key=index class="artical_list" v-on:click="linkTo(artical.content_id)">
       <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
       <img class="img" :src="img_list[index]" />
@@ -28,35 +33,23 @@ export default {
     axios.get(url)
       .then((data)=>{
             this.artical_list=data.data.data.essay;
-            console.log(this.artical_list);
-            // this.artical_list.forEach(element => {
-            //         console.log(element.content_id);
-            //         var img_url="http://v3.wufazhuce.com:8000/api/hp/detail/" + element.content_id + "?version=3.5.0&platform=android";
-            //         axios.get(img_url)
-            //           .then(data=>{this.img_list.push(data.data.data.hp_img_url);console.log(data.data.data.hp_img_url)})
-            //           .catch()                    
-            //         });
             })
       .catch()
     var imgs_url="http://v3.wufazhuce.com:8000/api/hp/idlist/0?version=3.5.0&platform=android";
     var imgs_id_list="";
     axios.get(imgs_url)
       .then(data=>{imgs_id_list=data.data.data;
-                  console.log(imgs_id_list);
                   imgs_id_list.forEach(element => {
-                    console.log(element);
                     var img_url="http://v3.wufazhuce.com:8000/api/hp/detail/" + element + "?version=3.5.0&platform=android";
                     axios.get(img_url)
                       .then(data=>{this.img_list.push(data.data.data.hp_img_url);console.log(data.data.data.hp_img_url)})
                       .catch()                    
                     });
-                    console.log(this.img_list);
                   })
       .catch()
   },
   methods:{
     linkTo:function(content_id){
-      console.log(content_id);
         this.$router.push({name: 'Artical',
         params: {
           id: content_id
@@ -72,6 +65,22 @@ export default {
     margin:0;
     padding:0;
   }  
+  .header{
+        margin:10px;
+        width:calc(100% - 20px);
+        height:40px;
+        letter-spacing: 2px;
+        position: fixed;
+        top:0px;
+        font-size:20px;
+        color:#000;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: solid 1px #ddd;
+    }
+  .chevron_down{
+    transform:translate(-100%)
+  }
   .artical_list{
     border-bottom:solid 1px #eee;
     display: flex;

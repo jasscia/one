@@ -33,7 +33,6 @@
             axios.get(url_com)
                 .then(data=>{
                     this.comments=data.data.data.data;
-                    // console.log(this.comments);
                     })
                 .catch();          
         }

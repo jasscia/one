@@ -2,22 +2,29 @@
     <div>
         <div class="title">{{ artical.hp_title }}</div>
         <div class="side_title">文/{{ artical.hp_author }}</div>
-        <div class="anchor" v-if="artical.anchor">
-            <Icon type="android-volume-up" class="icon"></Icon>
-            <span>有声阅读|{{artical.anchor}}</span>
-            <span>{{duration}}</span>
+        <div class="anchor" v-if="artical.anchor" @click="showAudio=!showAudio">
+            <Icon type="android-volume-up" class="icon icon-volume-up"></Icon>
+            <span>有声阅读|<span v-html="artical.anchor"></span></span>
+            <span v-html="duration"></span>
         </div>
+        <AudioIt :showAudio="showAudio" :artical="artical"></AudioIt>
+
         <div class="content" v-html="artical.hp_content"></div>
         <div class="side_title">{{artical.hp_author_introduce}}</div>
     </div>
 </template>
 <script>
 import axios from "axios";
+import AudioIt from "./AudioIt"
     export default{
         name:"ArticalContent",
+        components:{
+            AudioIt
+        },
         data(){
             return{
-                artical:""
+                artical:"",
+                showAudio:false
             }
         },
         computed:{
@@ -44,7 +51,7 @@ import axios from "axios";
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        console.log(this.artical);
+                        // console.log(this.artical)
                     })
                 .catch();        
         }
@@ -65,9 +72,9 @@ import axios from "axios";
         letter-spacing: 2px;
     }
     .anchor{
-        font-size: 20px;
+        font-size: 18px;
         letter-spacing: 1px;
-        line-height: 20px;
+        line-height: 18px;
         margin:auto;
         margin-bottom: 20px;
         padding:10px;
@@ -85,5 +92,8 @@ import axios from "axios";
         line-height: 25px;
         letter-spacing: 1px;
         text-align: left;
+    }
+    .icon-volume-up{
+        font-size: 20px;
     }
 </style>

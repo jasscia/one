@@ -2,13 +2,13 @@
     <div class="myBody">
         <div class="header">
             <span><Icon type="chevron-left"></Icon></span>
-            <span>阅读</span>
+            <span>{{artical.hp_title}}</span>
             <span><Icon type="android-bookmark"></Icon></span>
         </div>
         
         <div class="artical">
             <transition name="slide-fade">
-            <!-- <ArticalContent></ArticalContent> -->
+            <ArticalContent></ArticalContent>
             </transition>
             
             <div class="author other">
@@ -95,7 +95,6 @@
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        // console.log(this.artical);
                         this.authorImg=this.artical.author[0].web_url;
                     })
                 .catch();        
