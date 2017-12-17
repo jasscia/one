@@ -15,6 +15,7 @@
                 :artical="artical" 
                 :playAudio="playAudio"
                 v-on:ifShowAudio="ifShowAudio"
+                v-on:ifPlayAudio="ifPlayAudio"
                 v-on:getCurrentTime="getCurrentTime"></AudioIt>
 
         <div class="content" v-html="artical.hp_content"></div>

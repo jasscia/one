@@ -33,7 +33,7 @@
                 </div>                
             </div>
         </div>
-        <div v-else class="showless"><Icon type="disc" class="icon icon-disc"></Icon></div>
+        <div v-else class="showless" @click="$emit('ifShowAudio')"><Icon type="disc" class="icon icon-disc"></Icon></div>
     </div>
 </template>
 
@@ -45,30 +45,24 @@ export default {
   props:['showAudio','artical','playAudio'],
   data:function(){
       return {
-          pause:false,
           repeat:false,
           currentTime:0
           }
   },
   watch:{
       playAudio:function(){
+          var audio=document.getElementById('audio');
           if(this.playAudio){
-              var audio=document.getElementById('audio');
               audio.play();
           }else{
+              console.log(audio);
               audio.pause();
           }
       }
   },
   methods:{
     playControl:function(){
-          this.pause=!this.pause;
-          var audio=document.getElementById('audio');
-          if(this.pause){
-              audio.play();
-          }else{
-              audio.pause();
-          }
+        this.$emit('ifPlayAudio');
       },
     play_time:function(){
         var audio=document.getElementById('audio');
