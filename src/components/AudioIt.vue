@@ -1,6 +1,6 @@
 <template>
     <div class="myaudio" @click.stop.prevent="playControl">
-        <audio  id="audio" :loop="repeat" 
+        <audio  ref="audio" :loop="repeat" 
                     :src="artical.audio"
                     @timeupdate="play_time"></audio>
         <div v-if="showAudio" class="showmore">
@@ -13,8 +13,8 @@
                     <Icon type="skip-backward"></Icon>
                 </div>
                 <div @click="playControl">                        
-                    <Icon type="pause" v-if="pause"  ></Icon>
-                    <Icon type="play" v-else ></Icon>
+                    <Icon type="play" v-if="playAudio"  ></Icon>
+                    <Icon type="pause" v-else ></Icon>
                 </div>
                 <div>
                     <Icon type="skip-forward"></Icon>
@@ -33,7 +33,12 @@
                 </div>                
             </div>
         </div>
-        <div v-else class="showless" @click="$emit('ifShowAudio')"><Icon type="disc" class="icon icon-disc"></Icon></div>
+        <div v-else class="showless" @click="$emit('ifShowAudio')">
+            <div class="disc playing">
+
+                <!-- <Icon type="disc" :class="'icon icon-disc '+playAudio?'playing':''"></Icon> -->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -51,11 +56,11 @@ export default {
   },
   watch:{
       playAudio:function(){
-          var audio=document.getElementById('audio');
+          var audio=this.$refs.audio;
           if(this.playAudio){
               audio.play();
           }else{
-              console.log(audio);
+            //   console.log(audio);
               audio.pause();
           }
       }
@@ -65,7 +70,7 @@ export default {
         this.$emit('ifPlayAudio');
       },
     play_time:function(){
-        var audio=document.getElementById('audio');
+        var audio=this.$refs.audio;
         // console.log(audio);
         if(audio){              
         var playtime=audio.currentTime;
@@ -85,8 +90,8 @@ export default {
                 this.$emit('getCurrentTime',this.currentTime);
         }
     },
-    hiddenAudio:function(){
-        this.$emit('ifShowAudio')
+    animatePlayAudio:function(){
+
     }
   },
 }
@@ -122,7 +127,7 @@ export default {
         top:25px;
         height: 0;
         width: 40px;
-        border-bottom: solid 18px lightgray;
+        border-bottom: solid 20px lightgray;
     }
     .play-controler{
         display: flex;
@@ -140,12 +145,28 @@ export default {
         float: right;
         margin:0 5px;
     }
-    .icon-disc{
-        /* position: relative;
-        right: 30px; */
-        font-size: 20px;
-        transform: translateX(-20px);
+    .disc{
+        width:10px;
+        height:10px;
+        border:solid 10px;
+        border-radius: 50%;
+        border-color:red green yellow blue;        
+        /* border-top:solid 3px red; */
+        transform: translateX(-50%);
         vertical-align:middle;
+        opacity: 0.6;
+    }
+    .playing{        
+        transform-origin:center;
+        animation: playit 0.5s linear 0 infinite;
+    }
+    @keyframes playit {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
 
