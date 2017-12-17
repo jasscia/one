@@ -2,12 +2,20 @@
     <div>
         <div class="title">{{ artical.hp_title }}</div>
         <div class="side_title">文/{{ artical.hp_author }}</div>
-        <div class="anchor" v-if="artical.anchor" @click="showAudio=!showAudio">
+        <div class="anchor" v-if="artical.anchor" @click="ifPlayAudio">
             <Icon type="android-volume-up" class="icon icon-volume-up"></Icon>
-            <span>有声阅读|<span v-html="artical.anchor"></span></span>
-            <span v-html="duration"></span>
+            <span>有声阅读|
+                <span v-html="artical.anchor"></span>
+            </span>
+            <span v-if="playAudio" v-html="currentTime"></span>
+            <span v-else v-html="duration"></span>
         </div>
-        <AudioIt :showAudio="showAudio" :artical="artical"></AudioIt>
+        <AudioIt  v-if="artical.anchor" 
+                :showAudio="showAudio"
+                :artical="artical" 
+                :playAudio="playAudio"
+                v-on:ifShowAudio="ifShowAudio"
+                v-on:getCurrentTime="getCurrentTime"></AudioIt>
 
         <div class="content" v-html="artical.hp_content"></div>
         <div class="side_title">{{artical.hp_author_introduce}}</div>
@@ -15,16 +23,21 @@
 </template>
 <script>
 import axios from "axios";
+import {Icon} from "iview";
 import AudioIt from "./AudioIt"
     export default{
         name:"ArticalContent",
+        // component:{Icon},
         components:{
-            AudioIt
+            AudioIt,
+            Icon
         },
         data(){
             return{
                 artical:"",
-                showAudio:false
+                showAudio:false,
+                currentTime:'0\'0\"',
+                playAudio:false
             }
         },
         computed:{
@@ -51,16 +64,27 @@ import AudioIt from "./AudioIt"
             axios.get(url)
                 .then(data=>{
                         this.artical=data.data.data;
-                        // console.log(this.artical)
+                        console.log(this.artical.audio)
                     })
                 .catch();        
+        },
+        methods:{
+            ifShowAudio:function(){
+                this.showAudio=!this.showAudio;
+            },
+            ifPlayAudio:function(){
+                this.playAudio=!this.playAudio;
+            },
+            getCurrentTime:function(playTime){
+                this.currentTime=playTime
+            }
         }
     }
 </script>
 
 <style scoped>
     .title{
-        font-size:22px;
+        font-size:20px;
         margin-bottom: 5px;
         font-weight: 900;
         letter-spacing: 2px;

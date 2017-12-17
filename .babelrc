@@ -5,5 +5,8 @@
     }],
     "stage-2"
   ],
-  "plugins": ["transform-runtime"]
+  "plugins": [["import", {
+    "libraryName": "iview",
+    "libraryDirectory": "src/components"
+  }]]
 }

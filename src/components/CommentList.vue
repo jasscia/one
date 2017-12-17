@@ -19,8 +19,10 @@
 
 <script>
     import axios from "axios";
+    import {Icon} from "iview";
     export default{
         name:"CommentList",
+        components:{Icon},
         // props:["contentId"],
         data(){
             return{

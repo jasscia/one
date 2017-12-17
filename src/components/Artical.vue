@@ -1,8 +1,8 @@
 <template>
     <div class="myBody">
         <div class="header">
-            <span><Icon type="chevron-left"></Icon></span>
-            <span>{{artical.hp_title}}</span>
+            <span  @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>
+            <span class="title">{{artical.hp_title}}</span>
             <span><Icon type="android-bookmark"></Icon></span>
         </div>
         
@@ -57,12 +57,15 @@
     import CommentList from "./CommentList";
     import ArticalContent from "./ArticalContent";
     import axios from "axios";
+    import {Icon} from "iview";
     export default{
         name:"Artical",
+        // component:{},
         // props:["contentId"],
         components:{
             CommentList,
-            ArticalContent
+            ArticalContent,
+            Icon
         },
         data(){
             return{
@@ -120,6 +123,9 @@
         display: flex;
         justify-content: space-between;
         border-bottom: solid 1px #ddd;
+    }
+    .header .title{
+        font-size: 18px;
     }
     .artical{
         width:calc(100% - 20px);

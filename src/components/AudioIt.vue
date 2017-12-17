@@ -1,10 +1,13 @@
 <template>
-    <div class="myaudio">
+    <div class="myaudio" @click.stop.prevent="playControl">
+        <audio  id="audio" :loop="repeat" 
+                    :src="artical.audio"
+                    @timeupdate="play_time"></audio>
         <div v-if="showAudio" class="showmore">
             <!-- <div v-html="artical.hp_title"></div> -->
-            <audio  id="audio" controls :loop="repeat" src="http://music.wufazhuce.com/lnWLuH7ledvvvT7JhL1cVb1_HxT8"></audio>
+            
             <div class="anchor" v-html="artical.anchor"></div>
-            <div class="playtime" v-html="playTime"></div>
+            <div class="playtime" >{{currentTime}}</div>
             <div class="play-controler">
                 <div>
                     <Icon type="skip-backward"></Icon>
@@ -22,8 +25,10 @@
                     <Icon type="ios-reverse-camera-outline" v-if="repeat"></Icon>
                     <Icon type="ios-barcode-outline" v-else></Icon>
                 </div>
-                <div class="other" >
+                <!-- <div class="other" >
                     <Icon type="android-playstore"></Icon>
+                </div> -->
+                <div class="other" @click.stop.prevent="$emit('ifShowAudio')">
                     <Icon type="android-contract"></Icon>
                 </div>                
             </div>
@@ -33,35 +38,26 @@
 </template>
 
 <script>
+import {Icon} from "iview";
 export default {
   name:"AudioIt",
-  props:['showAudio','artical'],
+  components:{Icon},
+  props:['showAudio','artical','playAudio'],
   data:function(){
       return {
           pause:false,
-          repeat:false
+          repeat:false,
+          currentTime:0
           }
   },
-  computed:{
-      playTime:function(){
-          var audio=document.getElementById('audio');
-          console.log(audio);
-          if(audio){              
-            var playTime=audio.currentTime;
-            console.log(playTime);
-                    var hour=parseInt(playTime/3600);
-                    var min=parseInt((playTime-hour*3600)/60);
-                    var sedc=(playTime-hour*3600-min*60);
-                    if(playTime<60){
-                        return sedc+"\"";
-                    }
-                    if(playTime<3600){
-                        return min+"\'"+sedc+"\"";
-                    }
-                    // if(currentTime){
-                        return hour+":"+min+":"+sedc;
-                    // }
-          }else {return 0};
+  watch:{
+      playAudio:function(){
+          if(this.playAudio){
+              var audio=document.getElementById('audio');
+              audio.play();
+          }else{
+              audio.pause();
+          }
       }
   },
   methods:{
@@ -73,8 +69,32 @@ export default {
           }else{
               audio.pause();
           }
-      }
-  }
+      },
+    play_time:function(){
+        var audio=document.getElementById('audio');
+        // console.log(audio);
+        if(audio){              
+        var playtime=audio.currentTime;
+        // console.log(playtime);
+                var hour=parseInt(playtime/3600);
+                var min=parseInt((playtime-hour*3600)/60);
+                var sedc=parseInt(playtime-hour*3600-min*60);
+                if(playtime<60){
+                    this.currentTime=sedc+"\"";
+                }
+                if(playtime<3600){
+                    this.currentTime=min+"\'"+sedc+"\"";
+                }
+                if(playtime>=3600){
+                    this.currentTime=hour+":"+min+":"+sedc;
+                }
+                this.$emit('getCurrentTime',this.currentTime);
+        }
+    },
+    hiddenAudio:function(){
+        this.$emit('ifShowAudio')
+    }
+  },
 }
 </script>
 <style scoped>

@@ -21,4 +21,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+     .one-img-container img.fr-fil{
+        width:100%;
+    }
 </style>

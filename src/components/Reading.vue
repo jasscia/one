@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="header">
-            <span><Icon type="chevron-left"></Icon></span>
+            <span><Icon type="chevron-left" ></Icon></span>
             <span>阅读</span>
             <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
         </div>
@@ -20,8 +20,10 @@
 
 <script>
 import axios from "axios";
+import {Icon} from "iview";
 export default {
   name: 'Reading_list',
+  components:{Icon},
   data () {
     return {
       artical_list:"",
