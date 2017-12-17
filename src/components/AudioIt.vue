@@ -125,9 +125,12 @@ export default {
         position: absolute;
         right: 0px;
         top:25px;
-        height: 0;
+        height: 20px;
         width: 40px;
-        border-bottom: solid 20px lightgray;
+        background: lightgray;
+        border-radius:10px 0 0 10px;
+        /* border-bottom: solid 20px lightgray; */
+        
     }
     .play-controler{
         display: flex;
@@ -152,13 +155,13 @@ export default {
         border-radius: 50%;
         border-color:red green yellow blue;        
         /* border-top:solid 3px red; */
-        transform: translateX(-50%);
+        /* transform: translateX(-50%); */
         vertical-align:middle;
         opacity: 0.6;
     }
     .playing{        
         transform-origin:center;
-        animation: playit 0.5s linear 0 infinite;
+        animation: playit 1s linear 0s infinite;
     }
     @keyframes playit {
         from {
