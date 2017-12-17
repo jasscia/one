@@ -34,10 +34,7 @@
             </div>
         </div>
         <div v-else class="showless" @click="$emit('ifShowAudio')">
-            <div class="disc playing">
-
-                <!-- <Icon type="disc" :class="'icon icon-disc '+playAudio?'playing':''"></Icon> -->
-            </div>
+            <div :class="['disc', playAudio?'playing':'']"></div>
         </div>
     </div>
 </template>
