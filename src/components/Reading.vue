@@ -5,7 +5,7 @@
             <span>阅读</span>
             <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
         </div>
-    <div v-for = "(artical,index) in artical_list" :key=index class="artical_list" v-on:click="linkTo(artical.content_id)">
+    <div v-for = "(artical,index) in artical_list" :key="index" class="artical_list" v-on:click="linkTo(artical.content_id)">
       <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
       <img class="img" :src="img_list[index]" />
       <div class="text">
