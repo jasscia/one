@@ -92,7 +92,6 @@ export default {
   .img{
     width: 40px;
     height: 40px;
-    background:url(../assets/logo.png);
     background-size: cover;
     margin:0 5px;
   }

@@ -2,14 +2,17 @@
   <div class="container">
     <div class="header">
             <span><Icon type="chevron-left" ></Icon></span>
-            <span>影视</span>
+            <span>音乐</span>
             <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
         </div>
-    <div v-for = "(movie,index) in movie_list" :key="index" class="list" v-on:click="linkTo(movie.id)" :movieTitle="movie.title">
+    <div v-for = "(music,index) in musicInfo_list" :key="index" class="list" 
+        v-on:click="linkTo(music)" 
+        :musicInfo="music"
+        :music_storyTitle="music.story_title">
       <img class="img"  />
       <div class="text">
-        <p class="title">{{ movieInfo_list[index].title}}</p>
-        <p class="movieTitle">{{ movie.title}}</p>
+        <p class="title">{{ music.story_title}}</p>
+        <p class="musicTitle">{{ music.title}}|{{music.author.user_name}}</p>
       </div>
     </div>
   </div>
@@ -54,7 +57,7 @@
     height: 40px;
     line-height: 20px;
   }
-  .title,.movieTitle{
+  .title,.musicTitle{
     text-align: left;
     margin:0;
     margin-left:5px;
@@ -70,7 +73,7 @@
     color:#333;
     /* line-height: 19px; */
   }
-  .movieTitle{
+  .musicTitle{
     font-size:6px;
     color:#ddd;
     /* line-height: 15px; */
@@ -81,45 +84,41 @@
 import axios from "axios";
 import {Icon} from "iview";
 export default {
-  name:"movie_list",
+  name:"music_list",
   components:{Icon},
   data(){
       return {
-          movieInfo_list:[],
-          movie_list:[]
+          musicInfo_list:[],
+          music_list:[]
       }
   },
   created(){
-      let url="http://v3.wufazhuce.com:8000/api/movie/list/0?version=3.5.0&platform=android";
+      let url="http://v3.wufazhuce.com:8000/api/music/idlist/0?version=3.5.0&platform=android";
       axios.get(url)
       .then(
           data=>{
             
-              this.movie_list=data.data.data;
-              this.movieInfo_list=[];
+              this.music_list=data.data.data;
+              // console.log(this.music_list);
+              this.musicInfo_list=[];
               this.info_list=[];
-              this.movie_list.forEach(item=>{
-                  let info_path="http://v3.wufazhuce.com:8000/api/movie/"+item.id+"/story/1/0?version=3.5.0&platform=android";
+              this.music_list.forEach(item=>{
+                  let info_path="http://v3.wufazhuce.com:8000/api/music/detail/"+item+"?version=3.5.0&platform=android";
                   axios.get(info_path)
                   .then(data=>{
-                      this.movieInfo_list.push(data.data.data.data[0]);
+                      this.musicInfo_list.push(data.data.data);
                     })
-                  let img_path="http://v3.wufazhuce.com:8000/api/movie/detail/"+item.id+"?version=3.5.0&platform=android";
-                  axios.get(img_path)
-                  .then(data=>{
-                    // console.log(data.data.data)
-                  })
                   });
                   
           }
       );
   },
   methods:{
-    linkTo:function(movie_id){
+    linkTo:function(music_id){
         this.$router.push({
-          name: 'movie',
+          name: 'music',
           params: {
-            id: movie_id
+            id: music_id
           }
         })
     }

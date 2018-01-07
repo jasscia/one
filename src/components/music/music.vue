@@ -1,19 +1,21 @@
 <template>
     <div class="container">
+        <div v-if="showLyric">
+            <lyric :musicInfo="music"></lyric>
+        </div>
+        <div v-else>
         <div class="header">
-            <span  @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>
-            <span class="title">{{movieTitle}}</span>
-            <span><Icon type="android-bookmark"></Icon></span>
+            <span class="icn" @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>           
         </div>
         
-        <div class="movieBbody">
+        <div class="musicBody">
             <transition name="slide-fade">
-              <movieDiscribe :movieInfo="movie"></movieDiscribe>
+              <musicDiscribe :musicInfo="music" v-on:ifShowLyric="ifShowLyric"></musicDiscribe>
             </transition>
             
             <div class="author other">
                 <div class="author_title other_title">作者</div>
-                <div class="author_info other_info" v-for = "(item,index) in author_list" :key="index">
+                <div class="author_info other_info" v-for = "(item,index) in music.author_list" :key="index">
                     <img class="author_img other_img" :src="item.web_url"/>
                     <div class="author_info_text other_info_text">
                         <div class="author_name other_name">{{item.user_name}}</div>
@@ -32,49 +34,52 @@
                     </div>
                 </div>
             </div> -->
-            <commentList></commentList>
+            <!-- <commentList></commentList> -->
         </div>
         <div class="footer">
                 <input class="eval" placeholder="写一个评论..."/>
                 <div class="love">
                     <Icon type="android-favorite-outline"></Icon>                 
-                    <div  class="asign">{{movie.praisenum}}</div>
+                    <div  class="asign">{{music.praisenum}}</div>
                     </div>
                 <div class="evalCount">
                     <Icon type="ios-chatbubble-outline"></Icon>                 
-                    <div  class="asign">{{movie.sharenum}}</div>
+                    <div  class="asign">{{music.sharenum}}</div>
                 </div>
                 <div class="share">
                     <Icon type="share"></Icon>
                 </div>
+        </div>
         </div>
     </div>
 </template>
 
 <script>
     import commentList from "./commentList";
-    import movieDiscribe from "./movieDiscribe";
+    import musicDiscribe from "./musicDiscribe";
+    import lyric from "./lyric";
     import axios from "axios";
     import {Icon} from "iview";
     export default{
-        name:"movie",
+        name:"music",
         // component:{},
-        props:["movieTitle"],
+        props:["music_storyTitle","musicInfo"],
         components:{
             commentList,
-            movieDiscribe,
+            musicDiscribe,
+            lyric,
             Icon
         },
         data(){
             return{
-                author_list:[],
-                movie:"",
-                comments:""
+                comments:"",
+                music:"",
+                showLyric:false
             }
         },
         computed:{
             duration:function(){
-                var audio_duration=this.movie.audio_duration;
+                var audio_duration=this.music.audio_duration;
                 var hour=parseInt(audio_duration/3600);
                 var min=parseInt((audio_duration-hour*3600)/60);
                 var sedc=(audio_duration-hour*3600-min*60);
@@ -91,20 +96,31 @@
             }
         },
         created:function(){
-            var movie_id=this.$route.params.id;
-            var url="http://v3.wufazhuce.com:8000/api/movie/" + movie_id + "/story/1/0?version=3.5.0&platform=android";
+            var music_id=this.$route.params.id;
+            var url="http://v3.wufazhuce.com:8000/api/music/detail/" + music_id + "?version=3.5.0&platform=android";
             axios.get(url)
                 .then(data=>{
-                        this.movie=data.data.data.data[0];
-                        this.author_list=this.movie.author_list;
-                        console.log("movie:");
-                        console.log(this.movie);
+                        this.music=data.data.data;
+                        this.author_list=this.music.author_list;
+                        console.log("music:");
+                        console.log(this.music);
                     })
-                .catch();        
+                .catch(err=>{
+                    console.log(err);
+                });        
+        },
+        methods:{
+            ifShowLyric:function(){
+                this.showLyric=!this.showLyric;
+            }
         }
     }
 </script>
 <style scoped>
+    body{
+        margin:0;
+        padding:0;
+    }
     .container{
         margin:0;
         padding:0;
@@ -112,28 +128,24 @@
     }
   
     .header{
-        margin:10px;
-        width:calc(100% - 20px);
-        height:40px;
-        letter-spacing: 2px;
-        position: fixed;
-        top:0px;
-        font-size:20px;
-        color:#000;
-        display: flex;
-        justify-content: space-between;
-        border-bottom: solid 1px #ddd;
+        width:100%;
     }
-    .header .title{
-        font-size: 18px;
+    .icn{
+        position: absolute;
+        left: 0;
+        top:0;
+        z-index: 1;
+        margin-left:10px;
+        margin-top:10px;
+        font-size: 30px;
+        color: #ffffff;
     }
-    .movieBody{
+    
+    .musicBody{
         width:calc(100% - 20px);
         margin:0 10px;
         overflow: scroll;
-        position: fixed;
-        top:60px;
-        bottom:60px;
+        margin-bottom:60px;
     }
     
     .footer{
