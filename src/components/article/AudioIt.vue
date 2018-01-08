@@ -3,9 +3,7 @@
         <audio  ref="audio" :loop="repeat" 
                     :src="artical.audio"
                     @timeupdate="play_time"></audio>
-        <div v-if="showAudio" class="showmore">
-            <!-- <div v-html="artical.hp_title"></div> -->
-            
+        <div v-if="showAudio" class="showmore">            
             <div class="anchor" v-html="artical.anchor"></div>
             <div class="playtime" >{{currentTime}}</div>
             <div class="play-controler">

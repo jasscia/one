@@ -8,21 +8,6 @@
                 <Icon type="ipod" class="icon icon-volume-up" ></Icon>
             </div>
         </div>
-        <!-- <div class="anchor" v-if="musicInfo.anchor" @click="ifPlayAudio">
-            <Icon type="android-volume-up" class="icon icon-volume-up"></Icon>
-            <span>有声阅读|
-                <span v-html="musicInfo.anchor"></span>
-            </span>
-            <span v-if="playAudio" v-html="currentTime"></span>
-            <span v-else v-html="duration"></span>
-        </div> -->
-        <AudioIt  v-if="musicInfo.anchor" 
-                :showAudio="showAudio"
-                :artical="artical" 
-                :playAudio="playAudio"
-                v-on:ifShowAudio="ifShowAudio"
-                v-on:ifPlayAudio="ifPlayAudio"
-                v-on:getCurrentTime="getCurrentTime"></AudioIt>
 
         <div class="content" v-html="musicInfo.story"></div>
         <div class="side_title">{{musicInfo.charge_edt}}</div>
@@ -36,7 +21,6 @@ import {Icon} from "iview";
         props:["musicInfo"],
         // component:{Icon},
         components:{
-            // AudioIt,
             Icon
         },
         data(){
