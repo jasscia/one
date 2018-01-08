@@ -1,6 +1,6 @@
 <template>
     <div class="comment other">
-        <div class="comment_info other_title">评论列表</div>
+        <!-- <div class="comment_info other_title">评论列表</div>
         <div class="comment_info" v-for="(comment,index) in comments" :key="index">
             <div class="other_info comment_author ">
                 <img class="comment_img " :src="comment.user.web_url" />
@@ -13,7 +13,7 @@
                 <Icon type="thumbsup" class="opt"></Icon>
                 <span class="opt count">{{comment.praisenum}}</span>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

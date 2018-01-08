@@ -1,15 +1,14 @@
 <template>
   <div class="container">
     <div class="header">
-            <span><Icon type="chevron-left" ></Icon></span>
+            <span @click="$router.go(-1)"><Icon type="chevron-left" ></Icon></span>
             <span>音乐</span>
-            <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
-        </div>
+            <span class="chevron_down" @click="chooseBlock=!chooseBlock"><Icon type="chevron-down"></Icon></span>
+    </div>
+    <chooseBlock  v-if="chooseBlock"></chooseBlock>
     <div v-for = "(music,index) in musicInfo_list" :key="index" class="list" 
-        v-on:click="linkTo(music)" 
-        :musicInfo="music"
-        :music_storyTitle="music.story_title">
-      <img class="img"  />
+        v-on:click="linkTo(music.id)" >
+      <img class="img" :src="music.feeds_cover"/>
       <div class="text">
         <p class="title">{{ music.story_title}}</p>
         <p class="musicTitle">{{ music.title}}|{{music.author.user_name}}</p>
@@ -20,7 +19,7 @@
 </template>
 <style scoped>
   .container{
-    margin:0;
+    margin-top:60px;
     padding:0;
   }  
   .header{
@@ -83,13 +82,15 @@
 <script>
 import axios from "axios";
 import {Icon} from "iview";
+import chooseBlock from "../chooseBlock";
 export default {
   name:"music_list",
-  components:{Icon},
+  components:{Icon,chooseBlock},
   data(){
       return {
           musicInfo_list:[],
-          music_list:[]
+          music_list:[],
+          chooseBlock:false
       }
   },
   created(){

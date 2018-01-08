@@ -1,55 +1,44 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="music">
         <div v-if="showLyric">
-            <lyric :musicInfo="music"></lyric>
+            <lyric :musicInfo="music" v-on:ifShowLyric="ifShowLyric"></lyric>
         </div>
         <div v-else>
-        <div class="header">
-            <span class="icn" @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>           
-        </div>
-        
-        <div class="musicBody">
-            <transition name="slide-fade">
-              <musicDiscribe :musicInfo="music" v-on:ifShowLyric="ifShowLyric"></musicDiscribe>
-            </transition>
+            <div class="header">
+                <span class="icn" @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>           
+            </div>
             
-            <div class="author other">
-                <div class="author_title other_title">作者</div>
-                <div class="author_info other_info" v-for = "(item,index) in music.author_list" :key="index">
-                    <img class="author_img other_img" :src="item.web_url"/>
-                    <div class="author_info_text other_info_text">
-                        <div class="author_name other_name">{{item.user_name}}</div>
-                        <div class="summary side_title">{{item.summary}}</div>
-                    </div>
-                    <div class="care">关注</div>
-                </div>
-            </div>            
-            <!-- <div class="recommend other">
-                <div class="recommend_title other_title">相关推荐</div>
-                <div class="recommend_info other_info">
-                    <div class="recommend_img other_img">阅读</div>
-                    <div class="recommend_info_text other_info_text">
-                        <div class="recommend_name other_name">{{artical.hp_author}}</div>
-                        <div class="recommend_author side_title">{{artical.author&&artical.author[0].summary}}</div>
+            <div class="musicBody">
+                <transition name="slide-fade">
+                <musicDiscribe :musicInfo="music" v-on:ifShowLyric="ifShowLyric"></musicDiscribe>
+                </transition>
+                
+                <div class="author other">
+                    <div class="author_title other_title">作者</div>
+                    <div class="author_info other_info" v-for = "(item,index) in music.author_list" :key="index">
+                        <img class="author_img other_img" :src="item.web_url"/>
+                        <div class="author_info_text other_info_text">
+                            <div class="author_name other_name">{{item.user_name}}</div>
+                            <div class="summary side_title">{{item.summary}}</div>
+                        </div>
+                        <div class="care">关注</div>
                     </div>
                 </div>
-            </div> -->
-            <!-- <commentList></commentList> -->
-        </div>
-        <div class="footer">
-                <input class="eval" placeholder="写一个评论..."/>
-                <div class="love">
-                    <Icon type="android-favorite-outline"></Icon>                 
-                    <div  class="asign">{{music.praisenum}}</div>
+            </div>
+            <div class="footer">
+                    <input class="eval" placeholder="写一个评论..."/>
+                    <div class="love">
+                        <Icon type="android-favorite-outline"></Icon>                 
+                        <div  class="asign">{{music.praisenum}}</div>
+                        </div>
+                    <div class="evalCount">
+                        <Icon type="ios-chatbubble-outline"></Icon>                 
+                        <div  class="asign">{{music.sharenum}}</div>
                     </div>
-                <div class="evalCount">
-                    <Icon type="ios-chatbubble-outline"></Icon>                 
-                    <div  class="asign">{{music.sharenum}}</div>
-                </div>
-                <div class="share">
-                    <Icon type="share"></Icon>
-                </div>
-        </div>
+                    <div class="share">
+                        <Icon type="share"></Icon>
+                    </div>
+            </div>
         </div>
     </div>
 </template>
@@ -62,8 +51,6 @@
     import {Icon} from "iview";
     export default{
         name:"music",
-        // component:{},
-        props:["music_storyTitle","musicInfo"],
         components:{
             commentList,
             musicDiscribe,

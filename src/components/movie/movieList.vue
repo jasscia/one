@@ -1,23 +1,32 @@
 <template>
   <div class="container">
     <div class="header">
-            <span><Icon type="chevron-left" ></Icon></span>
+            <span  @click="$router.go(-1)"><Icon type="chevron-left" ></Icon></span>
             <span>影视</span>
-            <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
+            <span class="chevron_down" @click="chooseBlock=!chooseBlock"><Icon type="chevron-down"></Icon></span>
+    </div>
+    <chooseBlock  v-if="chooseBlock"></chooseBlock>
+    <div v-if="movie_list" >
+      <div v-for = "(movie,index) in movie_list" :key="index" 
+            class="list" 
+            v-on:click="linkTo(movie.id)" 
+            :movieTitle="movie.title">
+            <!-- v-if="movie.movieInfo&&movie.movieImg"> -->
+        <img v-if="loadDone" class="img"  :src="movie.movieImg.detailcover"/>
+        <div v-if="loadDone" class="text" >
+          <p class="title" >{{movie.movieInfo.title}}</p>
+          <p class="movieTitle">{{ movie.title}}</p>
         </div>
-    <div v-for = "(movie,index) in movie_list" :key="index" class="list" v-on:click="linkTo(movie.id)" :movieTitle="movie.title">
-      <img class="img"  />
-      <div class="text">
-        <p class="title">{{ movieInfo_list[index].title}}</p>
-        <p class="movieTitle">{{ movie.title}}</p>
+        <div v-else>loading</div>
       </div>
     </div>
+    
   </div>
   
 </template>
 <style scoped>
   .container{
-    margin:0;
+    margin-top:60px;
     padding:0;
   }  
   .header{
@@ -33,6 +42,7 @@
         justify-content: space-between;
         border-bottom: solid 1px #ddd;
     }
+  
   .chevron_down{
     transform:translate(-100%)
   }
@@ -80,36 +90,42 @@
 <script>
 import axios from "axios";
 import {Icon} from "iview";
+import chooseBlock from "../chooseBlock"
 export default {
   name:"movie_list",
-  components:{Icon},
+  components:{Icon,chooseBlock},
   data(){
       return {
           movieInfo_list:[],
-          movie_list:[]
+          movie_list:[],
+          chooseBlock:false,
+          loadDone:false
       }
   },
   created(){
       let url="http://v3.wufazhuce.com:8000/api/movie/list/0?version=3.5.0&platform=android";
       axios.get(url)
       .then(
-          data=>{
-            
+          data=>{            
               this.movie_list=data.data.data;
               this.movieInfo_list=[];
-              this.info_list=[];
-              this.movie_list.forEach(item=>{
-                  let info_path="http://v3.wufazhuce.com:8000/api/movie/"+item.id+"/story/1/0?version=3.5.0&platform=android";
+              for (let i=0;i<this.movie_list.length;i++){
+                let info_path="http://v3.wufazhuce.com:8000/api/movie/"+this.movie_list[i].id+"/story/1/0?version=3.5.0&platform=android";
                   axios.get(info_path)
                   .then(data=>{
-                      this.movieInfo_list.push(data.data.data.data[0]);
-                    })
-                  let img_path="http://v3.wufazhuce.com:8000/api/movie/detail/"+item.id+"?version=3.5.0&platform=android";
+                      this.movie_list[i].movieInfo=data.data.data.data[0];
+                    });
+                let img_path="http://v3.wufazhuce.com:8000/api/movie/detail/"+this.movie_list[i].id+"?version=3.5.0&platform=android"
                   axios.get(img_path)
                   .then(data=>{
-                    // console.log(data.data.data)
-                  })
-                  });
+                      this.movie_list[i].movieImg=data.data.data;
+                      // console.log(this.movie_list[i])
+                      // if(i==this.movie_list.length-1){
+                        this.loadDone=(i==this.movie_list.length-1?true:false)
+                      // }
+                      console.log(this.loadDone);
+                    })
+              }
                   
           }
       );

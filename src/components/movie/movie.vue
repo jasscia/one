@@ -2,7 +2,6 @@
     <div class="container">
         <div class="header">
             <span  @click="$router.go(-1)"><Icon type="chevron-left"></Icon></span>
-            <span class="title">{{movieTitle}}</span>
             <span><Icon type="android-bookmark"></Icon></span>
         </div>
         
@@ -109,6 +108,7 @@
         margin:0;
         padding:0;
         position: relative;
+        width: 100%;
     }
   
     .header{
@@ -122,7 +122,6 @@
         color:#000;
         display: flex;
         justify-content: space-between;
-        border-bottom: solid 1px #ddd;
     }
     .header .title{
         font-size: 18px;

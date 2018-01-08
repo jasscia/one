@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
     <div class="header">
-            <span><Icon type="chevron-left" ></Icon></span>
+            <span  @click="$router.go(-1)"><Icon type="chevron-left" ></Icon></span>
             <span>阅读</span>
-            <span class="chevron_down"><Icon type="chevron-down"></Icon></span>
-        </div>
+            <span class="chevron_down" @click="chooseBlock=!chooseBlock"><Icon type="chevron-down"></Icon></span>
+    </div>
+    <chooseBlock  v-if="chooseBlock"></chooseBlock>
     <div v-for = "(artical,index) in artical_list" :key="index" class="artical_list" v-on:click="linkTo(artical.content_id)">
       <!-- <router-link :to="{name:'reading/artical',params:{centent_id:artical.content_id}}">连接</router-link> -->
       <img class="img" :src="img_list[index]" />
@@ -21,13 +22,15 @@
 <script>
 import axios from "axios";
 import {Icon} from "iview";
+import chooseBlock from "../chooseBlock";
 export default {
   name: 'Reading_list',
-  components:{Icon},
+  components:{Icon,chooseBlock},
   data () {
     return {
       artical_list:"",
-      img_list:[]
+      img_list:[],
+      chooseBlock:false
     }
   },
   created:function(){
@@ -64,7 +67,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .hello{
-    margin:0;
+    margin-top:60px;
     padding:0;
   }  
   .header{

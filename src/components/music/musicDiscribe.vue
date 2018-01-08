@@ -1,10 +1,11 @@
 <template>
-    <div>
+    <div  v-if="musicInfo&&musicInfo.cover">
         <img class="bgPic" :src="musicInfo.cover"/>
         <div class="title">{{ musicInfo.story_title }}</div>
-        <div class="side_title">文/{{ musicInfo.author_list[0].user_name}}
-            <div @click="$emit('ifShowLyric')">
-            <Icon type="android-volume-up" class="icon icon-volume-up" ></Icon>
+        <div class="side_title">
+            <span>文/{{ musicInfo.author_list[0].user_name}}</span>            
+            <div class="lyricBtn" @click="$emit('ifShowLyric')">
+                <Icon type="ipod" class="icon icon-volume-up" ></Icon>
             </div>
         </div>
         <!-- <div class="anchor" v-if="musicInfo.anchor" @click="ifPlayAudio">
@@ -65,7 +66,7 @@ import {Icon} from "iview";
             }
         },
         created:function(){
-            console.log(musicInfo);
+            
             // var content_id=this.$route.params.id;
             // var url="http://v3.wufazhuce.com:8000/api/essay/" + content_id + "?version=3.5.0&platform=android";
             // axios.get(url)
@@ -131,5 +132,9 @@ import {Icon} from "iview";
     }
     .icon-volume-up{
         font-size: 20px;
+    }
+    .lyricBtn{
+        display: inline-block;
+        float:right;
     }
 </style>

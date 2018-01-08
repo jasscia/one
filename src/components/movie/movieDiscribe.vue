@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div v-if="movieInfo">
+        <img class="bgPic" :src="movieImage.detailcover">
         <div class="title">{{ movieInfo.title }}</div>
         <div class="side_title">文/{{ movieInfo.author_list[0].user_name}}</div>
         <div class="anchor" v-if="movieInfo.anchor" @click="ifPlayAudio">
@@ -38,7 +39,8 @@ import {Icon} from "iview";
                 artical:"",
                 showAudio:false,
                 currentTime:'0\'0\"',
-                playAudio:false
+                playAudio:false,
+                movieImage:"",
             }
         },
         computed:{
@@ -61,13 +63,19 @@ import {Icon} from "iview";
         },
         created:function(){
             var content_id=this.$route.params.id;
-            var url="http://v3.wufazhuce.com:8000/api/essay/" + content_id + "?version=3.5.0&platform=android";
-            axios.get(url)
+            // var url="http://v3.wufazhuce.com:8000/api/essay/" + content_id + "?version=3.5.0&platform=android";
+            // axios.get(url)
+            //     .then(data=>{
+            //             this.artical=data.data.data;
+            //             console.log(this.artical.audio)
+            //         })
+            //     .catch();  
+            var img_url="http://v3.wufazhuce.com:8000/api/movie/detail/"+content_id+"?version=3.5.0&platform=android"
+            axios.get(img_url)
                 .then(data=>{
-                        this.artical=data.data.data;
-                        console.log(this.artical.audio)
-                    })
-                .catch();        
+                    this.movieImage=data.data.data;
+                    console.log(this.movieImage);
+                })
         },
         methods:{
             ifShowAudio:function(){
@@ -84,6 +92,10 @@ import {Icon} from "iview";
 </script>
 
 <style scoped>
+    .bgPic{
+        height:300px;
+        width:100%;
+    }
     .title{
         font-size:20px;
         margin-bottom: 5px;

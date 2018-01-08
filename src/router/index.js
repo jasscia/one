@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import index from "@/components/index"
 import musicList from '@/components/music/musicList'
 import music from '@/components/music/music'
 import movieList from '@/components/movie/movieList'
@@ -12,7 +13,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {path:'/',
-    redirect:'/musics/list'
+    redirect:'/index'
+  },
+  {
+    path: '/index',
+    name: 'index',
+    component:index
   },
   //电影
   {
