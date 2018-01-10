@@ -1,6 +1,7 @@
 # one
 
-> A Vue.js project
+> A Vue.js project <br>
+模拟one 显示其阅读、电影、音乐三个板块的内容
 
 ## Build Setup
 
@@ -20,6 +21,6 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 ## 数据资源
-数据来源于  [one API](http://note.youdao.com/noteshare?id=87116ee98200c5f206b0ee1cdfa4bd65)
+请求数据来源于  [one API](https://github.com/jokermonn/-Api/blob/master/ONE~v3.5.0.md)
 ## 功能介绍
-利用现有的API接口 重新编写 one 的页面，分为‘阅读’、‘影视’、‘音乐’三个部分
+模拟one 显示其阅读、电影、音乐三个板块的内容,其中阅读板块内容比较完整,电影和音乐板块内容不完整，因为有部分内容（如comment）的资源请求方式
