@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header">
             <span  @click="$router.go(-1)"><Icon type="chevron-left" ></Icon></span>
-            <span>影视</span>
+            <span>电影</span>
             <span class="chevron_down" @click="chooseBlock=!chooseBlock"><Icon type="chevron-down"></Icon></span>
     </div>
     <chooseBlock  v-if="chooseBlock"></chooseBlock>
