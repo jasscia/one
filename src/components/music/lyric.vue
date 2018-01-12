@@ -16,7 +16,7 @@
     </div>
   </div>
 </template>
-<<script>
+<script>
 import {Icon} from "iview";
 export default {
   props:["musicInfo"],
